@@ -1,0 +1,7 @@
+services:
+  organizr:
+    build: .
+    container_name: organizr-app
+    ports:
+      - "8080:80"
+    restart: unless-stopped

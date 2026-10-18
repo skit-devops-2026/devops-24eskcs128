@@ -1,0 +1,11 @@
+.git
+.github
+.gitignore
+Dockerfile
+docker-compose.yml
+README.md
+docs/
+tests/
+k8s/
+monitoring/
+scripts/
