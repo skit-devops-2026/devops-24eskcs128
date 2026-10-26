@@ -30,3 +30,6 @@ npm-debug.log*
 
 # but keep the example file
 !.env.example
+
+.env
+node_modules/
