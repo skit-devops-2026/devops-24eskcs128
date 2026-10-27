@@ -74,7 +74,7 @@ function Search() {
           </h1>
 
           <nav>
-            <Link className="iconsonbar button text-muted" to="/">
+            <Link className="iconsonbar button text-muted" to="/home">
               <i className="con fas fa-home p-2"></i>
               Home
             </Link>

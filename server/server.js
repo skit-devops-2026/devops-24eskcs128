@@ -1,9 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const Task = require("./models/Task");
+const User = require("./models/User");
 
 const app = express();
 
@@ -13,6 +16,146 @@ app.use(express.json());
 // Test route
 app.get("/", (req, res) => {
 res.send("Organizr backend is running!");
+});
+
+// REGISTER USER
+app.post("/api/auth/register", async (req, res) => {
+    try {
+        const { fullName, email, password, confirmPassword } = req.body;
+
+        // Validate required fields
+        if (
+            !fullName?.trim() ||
+            !email?.trim() ||
+            !password ||
+            !confirmPassword
+        ) {
+            return res.status(400).json({
+                message: "All fields are required.",
+            });
+        }
+
+        // Validate email format
+        const normalizedEmail = email.trim().toLowerCase();
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+            return res.status(400).json({
+                message: "Please enter a valid email address.",
+            });
+        }
+
+        // Validate password
+        if (password.length < 8) {
+            return res.status(400).json({
+                message: "Password must contain at least 8 characters.",
+            });
+        }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                message: "Passwords do not match.",
+            });
+        }
+
+        // Check whether the email is already registered
+        const existingUser = await User.findOne({
+            email: normalizedEmail,
+        });
+
+        if (existingUser) {
+            return res.status(409).json({
+                message: "An account with this email already exists.",
+            });
+        }
+
+        // Hash the password before saving it
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        const user = await User.create({
+            fullName: fullName.trim(),
+            email: normalizedEmail,
+            password: hashedPassword,
+        });
+
+        return res.status(201).json({
+            message: "Registration successful! You can now log in.",
+            user: {
+                id: user._id,
+                fullName: user.fullName,
+                email: user.email,
+            },
+        });
+    } catch (error) {
+        // Handle duplicate email indexes, including concurrent requests
+        if (error.code === 11000) {
+            return res.status(409).json({
+                message: "An account with this email already exists.",
+            });
+        }
+
+        console.error("Registration error:", error);
+
+        return res.status(500).json({
+            message: "Registration failed. Please try again.",
+        });
+    }
+});
+
+
+// LOGIN USER
+app.post("/api/auth/login", async (req, res) => {
+    console.log("Login Route Hit");
+    try {
+        const { email, password } = req.body;
+
+        if (!email?.trim() || !password) {
+            return res.status(400).json({
+                message: "Email and password are required.",
+            });
+        }
+
+        // Explicitly include the password hash for verification
+        const user = await User.findOne({
+            email: email.trim().toLowerCase(),
+        }).select("+password");
+
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({
+                message: "Invalid email or password.",
+            });
+        }
+
+        if (!process.env.JWT_SECRET) {
+            console.error("JWT_SECRET is missing from the server environment.");
+
+            return res.status(500).json({
+                message: "Authentication is not configured correctly.",
+            });
+        }
+
+        // Create an authentication token
+        const token = jwt.sign(
+            { userId: user._id.toString() },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        return res.status(200).json({
+            message: "Login successful.",
+            token,
+            user: {
+                id: user._id,
+                fullName: user.fullName,
+                email: user.email,
+            },
+        });
+    } catch (error) {
+        console.error("Login error:", error.message);
+
+        return res.status(500).json({
+            message: "Login failed. Please try again.",
+        });
+    }
 });
 
 // GET all tasks, with optional search

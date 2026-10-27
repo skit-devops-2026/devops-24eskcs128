@@ -706,3 +706,139 @@ main {
         width: calc(100vw - 2rem);
     }
 }
+
+/* ===== Filtering Dropdown Improvements ===== */
+
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-container .dropdown-menu.Z {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  min-width: 280px;
+  padding: 0;
+  margin: 0;
+  background: #252525;
+  color: #f5f5f5;
+  border: 1px solid #414141;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  list-style: none;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-container .dropdown-menu.Z > li {
+  padding: 12px 16px;
+  border-bottom: 1px solid #414141;
+}
+
+.dropdown-container .dropdown-menu.Z .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.dropdown-container .dropdown-menu.Z .dropdown-item:hover {
+  background: #353535;
+  color: #00c4a7;
+}
+
+/* Filter panel */
+.dropdown-container .filter-section {
+  position: relative;
+  padding: 18px 16px;
+  background: #252525;
+  color: #f5f5f5;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Section headings */
+.dropdown-container .filter-section h4 {
+  margin: 12px 0 10px;
+  color: #00c4a7;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dropdown-container .filter-section h4:first-of-type {
+  margin-top: 4px;
+}
+
+/* Individual filter options */
+.dropdown-container .filter-section label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 10px 8px;
+  color: #e5e5e5;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.dropdown-container .filter-section label:hover {
+  background: #353535;
+}
+
+/* Checkbox appearance */
+.dropdown-container .filter-section input.checkbox {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #00c4a7;
+  cursor: pointer;
+}
+
+/* Icons */
+.dropdown-container .filter-section label i {
+  width: 16px;
+  color: #00c4a7;
+  text-align: center;
+}
+
+/* Number input for "Due Next" */
+.dropdown-container .filter-section input[type="number"] {
+  width: 55px;
+  min-width: 55px;
+  padding: 5px;
+  color: #ffffff;
+  background: #353535;
+  border: 1px solid #555555;
+  border-radius: 5px;
+  outline: none;
+}
+
+.dropdown-container .filter-section input[type="number"]:focus {
+  border-color: #00c4a7;
+}
+
+/* Close button */
+.dropdown-container .filter-section .close-modal {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  color: #aaaaaa;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dropdown-container .filter-section .close-modal:hover {
+  color: #00c4a7;
+}

@@ -232,7 +232,7 @@ async function handleTaskSubmit(event) {
 
           <Link
             className="iconsonbar button text-muted"
-            to="/"
+            to="/home"
             onClick={() => setSidebarOpen(false)}
           >
             <i className="con fas fa-house p-2"></i>

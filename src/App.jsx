@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
 import Search from "./pages/Search.jsx";
 import All_Tasks from "./pages/All_Tasks.jsx";
@@ -62,6 +63,11 @@ function App() {
         <Routes>
           <Route
             path="/"
+            element={<Login />}
+          />
+
+          <Route
+            path="/home"
             element={
               <Home
                 tasks={tasks}

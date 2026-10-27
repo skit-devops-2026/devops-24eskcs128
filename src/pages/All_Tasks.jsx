@@ -88,7 +88,7 @@ function AllTasks({ tasks = [], onDelete }) {
 
                     <Link
                         className="iconsonbar button text-muted"
-                        to="/"
+                        to="/home"
                         onClick={() => setSidebarOpen(false)}
                     >
                         <i className="con fas fa-home p-2"></i>
