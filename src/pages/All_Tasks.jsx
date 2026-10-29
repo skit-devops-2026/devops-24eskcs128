@@ -6,7 +6,14 @@ import { Link, useNavigate } from "react-router-dom";
 function AllTasks({ tasks = [], onDelete }) {
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [completedTasks, setCompletedTasks] = useState({});
 
+    const toggleComplete = (taskId) => {
+        setCompletedTasks((previous) => ({
+            ...previous,
+            [taskId]: !previous[taskId],
+        }));
+    };
     // Close sidebar when clicking outside
     useEffect(() => {
         const handleOutsideClick = (event) => {
@@ -165,25 +172,33 @@ function AllTasks({ tasks = [], onDelete }) {
 
                                         <hr />
 
-                                        <button
-                                            type="button"
-                                            className="update-btn"
-                                            onClick={() =>
-                                                handleUpdate(task)
-                                            }
-                                        >
-                                            Update
-                                        </button>
 
-                                        <button
-                                            type="button"
-                                            className="delete-btn"
-                                            onClick={() =>
-                                                handleDelete(task.id)
-                                            }
-                                        >
-                                            Delete
-                                        </button>
+                                        <div className="task-actions">
+                                            <button
+                                                type="button"
+                                                className={`complete-btn ${completedTasks[task.id] ? "completed" : ""}`}
+                                                onClick={() => toggleComplete(task.id)}
+                                            >
+                                                {completedTasks[task.id] ? "Completed ✓" : "Complete"}
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                className="update-btn"
+                                                onClick={() => handleUpdate(task)}
+                                            >
+                                                Edit
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                className="delete-btn"
+                                                onClick={() => handleDelete(task.id)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+
                                     </li>
                                 ))}
                             </ul>
